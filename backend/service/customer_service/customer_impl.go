@@ -17,6 +17,21 @@ type CustomerServiceImpl struct {
 	DB                 *sql.DB
 }
 
+// UpdateEmail implements CustomerService.
+func (service *CustomerServiceImpl) UpdateEmail() {
+	panic("unimplemented")
+}
+
+// UpdatePassword implements CustomerService.
+func (service *CustomerServiceImpl) UpdatePassword() {
+	panic("unimplemented")
+}
+
+// UpdatePhoneNumber implements CustomerService.
+func (service *CustomerServiceImpl) UpdatePhoneNumber() {
+	panic("unimplemented")
+}
+
 func NewCustomerService(customerRepository customerrepository.CustomerRepository, db *sql.DB) CustomerService {
 	return &CustomerServiceImpl{
 		CustomerRepository: customerRepository,
@@ -137,7 +152,41 @@ func (service *CustomerServiceImpl) Create(ctx context.Context, request customer
 	}
 }
 
-// Update implements CustomerService.
-func (service *CustomerServiceImpl) Update(ctx context.Context, request customerweb.CustomerUpdateRequest) customerweb.CustomerResponse {
-	panic("unimplemented")
+// UpdateName implements CustomerService.
+func (service *CustomerServiceImpl) UpdateName(ctx context.Context, request customerweb.CustomerUpdateName) customerweb.CustomerResponse {
+	tx, err := service.DB.Begin()
+	helper.HandleErrorTransaction(err)
+	defer helper.HandleTx(tx)
+
+	// 1. ambil data awal
+	customer, err := service.CustomerRepository.FindById(ctx, tx, request.Customer_id)
+	if err != nil {
+		log.Printf("user with id %d not found: %w", request.Customer_id, err)
+		return customerweb.CustomerResponse{}
+	}
+
+	// 2. ubah field name
+	customer.Name = request.Name
+
+	// 3. update hanya name
+	_, err = service.CustomerRepository.UpdateName(ctx, tx, customer)
+	if err != nil {
+		log.Printf("error updating custome with id %d: %v", request.Customer_id, err)
+		return customerweb.CustomerResponse{}
+	}
+
+	// 4. ambil ulang customer setelah update
+	updatedCustomer, err := service.CustomerRepository.FindById(ctx, tx, request.Customer_id)
+	if err != nil {
+		log.Printf("error fetching updated customer with id %d: %v", request.Customer_id, err)
+		return customerweb.CustomerResponse{}
+	}
+
+	// 5. kembalikan data lengkapp
+	return customerweb.CustomerResponse{
+		Customer_id:  updatedCustomer.Customer_id,
+		Name:         updatedCustomer.Name,
+		Phone_number: updatedCustomer.Phone_number,
+		Email:        updatedCustomer.Email,
+	}
 }
