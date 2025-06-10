@@ -16,4 +16,7 @@ type CustomerRepository interface {
 	Login(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error)
 
 	UpdateName(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error)
+	UpdateEmail(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error)
+	UpdatePhoneNumber(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error)
+	UpdatePassword(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error)
 }

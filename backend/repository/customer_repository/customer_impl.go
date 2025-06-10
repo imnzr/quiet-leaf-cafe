@@ -137,3 +137,54 @@ func (c CustomerRepositoryImpl) UpdateName(ctx context.Context, tx *sql.Tx, cust
 	}
 	return customer, nil
 }
+
+// UpdateEmail implements CustomerRepository.
+func (c CustomerRepositoryImpl) UpdateEmail(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error) {
+	query := "UPDATE customer SET email = ? WHERE customer_id = ?"
+	result, err := tx.ExecContext(ctx, query, customer.Email, customer.Customer_id)
+	helper.HandleQueryError(err)
+
+	RowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		return models.Customer{}, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+	if RowsAffected == 0 {
+		return models.Customer{}, fmt.Errorf("no customer found with id: %d", customer.Customer_id)
+	}
+	return customer, nil
+}
+
+// UpdatePhoneNumber implements CustomerRepository.
+func (c CustomerRepositoryImpl) UpdatePhoneNumber(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error) {
+	query := "UPDATE customer SET phone_number = ? WHERE customer_id = ?"
+	result, err := tx.ExecContext(ctx, query, customer.Phone_number, customer.Customer_id)
+	helper.HandleQueryError(err)
+
+	RowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		return models.Customer{}, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+	if RowsAffected == 0 {
+		return models.Customer{}, fmt.Errorf("no customer found with id: %d", customer.Customer_id)
+	}
+	return customer, nil
+}
+
+// UpdatePassword implements CustomerRepository.
+func (c CustomerRepositoryImpl) UpdatePassword(ctx context.Context, tx *sql.Tx, customer models.Customer) (models.Customer, error) {
+	query := "UPDATE customer SET password = ? WHERE customer_id = ?"
+	result, err := tx.ExecContext(ctx, query, customer.Password, customer.Customer_id)
+	helper.HandleQueryError(err)
+
+	RowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		return models.Customer{}, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+	if RowsAffected == 0 {
+		return models.Customer{}, fmt.Errorf("no customer found with id: %d", customer.Customer_id)
+	}
+	return customer, nil
+}
