@@ -17,21 +17,6 @@ type CustomerServiceImpl struct {
 	DB                 *sql.DB
 }
 
-// UpdateEmail implements CustomerService.
-func (service *CustomerServiceImpl) UpdateEmail() {
-	panic("unimplemented")
-}
-
-// UpdatePassword implements CustomerService.
-func (service *CustomerServiceImpl) UpdatePassword() {
-	panic("unimplemented")
-}
-
-// UpdatePhoneNumber implements CustomerService.
-func (service *CustomerServiceImpl) UpdatePhoneNumber() {
-	panic("unimplemented")
-}
-
 func NewCustomerService(customerRepository customerrepository.CustomerRepository, db *sql.DB) CustomerService {
 	return &CustomerServiceImpl{
 		CustomerRepository: customerRepository,
@@ -161,7 +146,7 @@ func (service *CustomerServiceImpl) UpdateName(ctx context.Context, request cust
 	// 1. ambil data awal
 	customer, err := service.CustomerRepository.FindById(ctx, tx, request.Customer_id)
 	if err != nil {
-		log.Printf("user with id %d not found: %w", request.Customer_id, err)
+		log.Printf("user with id %d not found: %v", request.Customer_id, err)
 		return customerweb.CustomerResponse{}
 	}
 
@@ -183,6 +168,119 @@ func (service *CustomerServiceImpl) UpdateName(ctx context.Context, request cust
 	}
 
 	// 5. kembalikan data lengkapp
+	return customerweb.CustomerResponse{
+		Customer_id:  updatedCustomer.Customer_id,
+		Name:         updatedCustomer.Name,
+		Phone_number: updatedCustomer.Phone_number,
+		Email:        updatedCustomer.Email,
+	}
+}
+
+// UpdateEmail implements CustomerService.
+func (service *CustomerServiceImpl) UpdateEmail(ctx context.Context, request customerweb.CustomerUpdateEmail) customerweb.CustomerResponse {
+	tx, err := service.DB.Begin()
+	helper.HandleErrorTransaction(err)
+	defer helper.HandleTx(tx)
+
+	customer, err := service.CustomerRepository.FindById(ctx, tx, request.CustomerId)
+	if err != nil {
+		log.Printf("user with id %d not found: %v", request.CustomerId, err)
+		return customerweb.CustomerResponse{}
+
+	}
+
+	customer.Email = request.Email
+
+	_, err = service.CustomerRepository.UpdateEmail(ctx, tx, customer)
+	if err != nil {
+		log.Printf("error updating customer with id %d: %v", request.CustomerId, err)
+		return customerweb.CustomerResponse{}
+	}
+
+	updateCustomer, err := service.CustomerRepository.FindById(ctx, tx, request.CustomerId)
+	if err != nil {
+		log.Printf("error fetching updated customer with id %d: %v", request.CustomerId, err)
+	}
+
+	return customerweb.CustomerResponse{
+		Customer_id:  updateCustomer.Customer_id,
+		Name:         updateCustomer.Name,
+		Phone_number: updateCustomer.Phone_number,
+		Email:        updateCustomer.Email,
+	}
+}
+
+// UpdatePassword implements CustomerService.
+func (service *CustomerServiceImpl) UpdatePassword(ctx context.Context, request customerweb.CustomerUpdatePassword) customerweb.CustomerResponse {
+	tx, err := service.DB.Begin()
+	helper.HandleErrorTransaction(err)
+	defer helper.HandleTx(tx)
+
+	// 1. ambil data customer berdasarkan ID
+	customer, err := service.CustomerRepository.FindById(ctx, tx, request.Customer_Id)
+	if err != nil {
+		log.Printf("customer with id %d not found: %v", request.Customer_Id, err)
+		return customerweb.CustomerResponse{}
+	}
+	// 2. verifikasi password lama
+	err = bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(request.OldPassword))
+	if err != nil {
+		log.Printf("old password does not match for customer with id %d: %v", request.Customer_Id, err)
+		return customerweb.CustomerResponse{}
+	}
+
+	// 3. hash password baru
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		log.Printf("error hashing new password for customer with id %d: %v", request.Customer_Id, err)
+		return customerweb.CustomerResponse{}
+	}
+	hashedPasswordStr := string(hashedPassword)
+
+	customer.Password = request.NewPassword
+
+	// 4. update password customer
+	customer.Password = hashedPasswordStr
+	_, err = service.CustomerRepository.UpdatePassword(ctx, tx, customer)
+	if err != nil {
+		log.Printf("error updating password for customer with id %d: %v", request.Customer_Id, err)
+	}
+
+	// 5. ambil ulang customer setelah update
+	updatedCustomer, err := service.CustomerRepository.FindById(ctx, tx, request.Customer_Id)
+	if err != nil {
+		log.Printf("error fetching updated customer with id %d: %v", request.Customer_Id, err)
+	}
+	return customerweb.CustomerResponse{
+		Customer_id:  updatedCustomer.Customer_id,
+		Name:         updatedCustomer.Name,
+		Phone_number: updatedCustomer.Phone_number,
+		Email:        updatedCustomer.Email,
+	}
+}
+
+// UpdatePhoneNumber implements CustomerService.
+func (service *CustomerServiceImpl) UpdatePhoneNumber(ctx context.Context, request customerweb.CustomerUpdatePhoneNumber) customerweb.CustomerResponse {
+	tx, err := service.DB.Begin()
+	helper.HandleErrorTransaction(err)
+	defer helper.HandleTx(tx)
+
+	customer, err := service.CustomerRepository.FindById(ctx, tx, request.CustomerId)
+	if err != nil {
+		log.Printf("customer with id %d not found: %v", request.CustomerId, err)
+		return customerweb.CustomerResponse{}
+	}
+	customer.Phone_number = request.Phone_number
+
+	_, err = service.CustomerRepository.UpdatePhoneNumber(ctx, tx, customer)
+	if err != nil {
+		log.Printf("error updating phone number for customer with id %d: %v", request.CustomerId, err)
+	}
+	updatedCustomer, err := service.CustomerRepository.FindById(ctx, tx, request.CustomerId)
+	if err != nil {
+		log.Printf("error fetching updated customer with id %d: %v", request.CustomerId, err)
+	}
+
 	return customerweb.CustomerResponse{
 		Customer_id:  updatedCustomer.Customer_id,
 		Name:         updatedCustomer.Name,

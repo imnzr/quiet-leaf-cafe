@@ -12,4 +12,8 @@ func CustomerRouter(router *httprouter.Router, customerController customercontro
 	router.POST("/api/customer/login", customerController.Login)
 	router.DELETE("/api/customer/:customerId", customerController.Delete)
 	router.PUT("/api/update/:customerId/name", customerController.UpdateName)
+
+	router.PUT("/api/update/:customerId/email", customerController.UpdateEmail)
+	router.PUT("/api/update/:customerId/phone", customerController.UpdatePhoneNumber)
+	router.PUT("/api/update/:customerId/password", customerController.UpdatePassword)
 }

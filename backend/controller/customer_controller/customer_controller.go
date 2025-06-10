@@ -134,3 +134,82 @@ func (controller *CustomerControllerImpl) UpdateName(writter http.ResponseWriter
 	}
 	utils.WriteJsonError(writter, http.StatusOK, webResponse)
 }
+
+// UpdateEmail implements CustomerControllerInterface.
+func (controller *CustomerControllerImpl) UpdateEmail(writter http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	decoder := json.NewDecoder(request.Body)
+	customerUpdateEmail := customerweb.CustomerUpdateEmail{}
+	err := decoder.Decode(&customerUpdateEmail)
+	if err != nil {
+		http.Error(writter, "invalid request body", http.StatusBadRequest)
+	}
+
+	customerId := params.ByName("customerId")
+	id, err := strconv.Atoi(customerId)
+	if err != nil {
+		http.Error(writter, "invalid customer ID", http.StatusBadRequest)
+	}
+
+	customerUpdateEmail.CustomerId = id
+
+	customerResponse := controller.CustomerService.UpdateEmail(request.Context(), customerUpdateEmail)
+	webResponse := web.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   customerResponse,
+	}
+	utils.WriteJsonError(writter, http.StatusOK, webResponse)
+}
+
+// UpdatePassword implements CustomerControllerInterface.
+func (controller *CustomerControllerImpl) UpdatePassword(writter http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	decoder := json.NewDecoder(request.Body)
+	customerUpdatePassword := customerweb.CustomerUpdatePassword{}
+	err := decoder.Decode(&customerUpdatePassword)
+	if err != nil {
+		http.Error(writter, "invalid request body", http.StatusBadRequest)
+	}
+
+	customerId := params.ByName("customerId")
+	id, err := strconv.Atoi(customerId)
+	if err != nil {
+		http.Error(writter, "invalid customer ID", http.StatusBadRequest)
+	}
+
+	customerUpdatePassword.Customer_Id = id
+
+	customerResponse := controller.CustomerService.UpdatePassword(request.Context(), customerUpdatePassword)
+	webResponse := web.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   customerResponse,
+	}
+	utils.WriteJsonError(writter, http.StatusOK, webResponse)
+}
+
+// UpdatePhoneNumber implements CustomerControllerInterface.
+func (controller *CustomerControllerImpl) UpdatePhoneNumber(writter http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	decoder := json.NewDecoder(request.Body)
+	customerUpdatePhone := customerweb.CustomerUpdatePhoneNumber{}
+	err := decoder.Decode(&customerUpdatePhone)
+	if err != nil {
+		http.Error(writter, "invalid request body", http.StatusBadRequest)
+	}
+
+	customerId := params.ByName("customerId")
+	id, err := strconv.Atoi(customerId)
+	if err != nil {
+		http.Error(writter, "invalid customer ID", http.StatusBadRequest)
+	}
+
+	customerUpdatePhone.CustomerId = id
+
+	customerResponse := controller.CustomerService.UpdatePhoneNumber(request.Context(), customerUpdatePhone)
+
+	WebResponse := web.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   customerResponse,
+	}
+	utils.WriteJsonError(writter, http.StatusOK, WebResponse)
+}

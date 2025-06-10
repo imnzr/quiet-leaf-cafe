@@ -15,4 +15,7 @@ type CustomerService interface {
 	Login(ctx context.Context, request customerweb.CustomerLoginRequest) (customerweb.CustomerResponse, error)
 
 	UpdateName(ctx context.Context, request customerweb.CustomerUpdateName) customerweb.CustomerResponse
+	UpdateEmail(ctx context.Context, request customerweb.CustomerUpdateEmail) customerweb.CustomerResponse
+	UpdatePhoneNumber(ctx context.Context, request customerweb.CustomerUpdatePhoneNumber) customerweb.CustomerResponse
+	UpdatePassword(ctx context.Context, request customerweb.CustomerUpdatePassword) customerweb.CustomerResponse
 }

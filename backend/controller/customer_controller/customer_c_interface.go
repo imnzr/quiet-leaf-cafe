@@ -14,4 +14,7 @@ type CustomerControllerInterface interface {
 	Login(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
 
 	UpdateName(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
+	UpdateEmail(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
+	UpdatePhoneNumber(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
+	UpdatePassword(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
 }
