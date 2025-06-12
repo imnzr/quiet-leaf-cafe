@@ -7,15 +7,15 @@ import (
 )
 
 type CustomerService interface {
-	Create(ctx context.Context, request customerweb.CustomerCreateRequest) customerweb.CustomerResponse
-	Delete(ctx context.Context, customer_id int)
-	FindById(ctx context.Context, customer_id int) customerweb.CustomerResponse
-	FindByAll(ctx context.Context) []customerweb.CustomerResponse
-	FindByEmail(ctx context.Context, email string) (customerweb.CustomerResponse, error)
-	Login(ctx context.Context, request customerweb.CustomerLoginRequest) (customerweb.CustomerResponse, error)
+	Create(ctx context.Context, request customerweb.CustomerCreateRequest) customerweb.CustomerResponseHandler
+	Delete(ctx context.Context, customer_id int) customerweb.CustomerResponseHandler
+	FindById(ctx context.Context, customer_id int) customerweb.CustomerResponseHandler
+	FindByAll(ctx context.Context) []customerweb.CustomerDataResponse
+	FindByEmail(ctx context.Context, email string) customerweb.CustomerResponseHandler
+	Login(ctx context.Context, request customerweb.CustomerLoginRequest) customerweb.CustomerResponseHandler
 
-	UpdateName(ctx context.Context, request customerweb.CustomerUpdateName) customerweb.CustomerResponse
-	UpdateEmail(ctx context.Context, request customerweb.CustomerUpdateEmail) customerweb.CustomerResponse
-	UpdatePhoneNumber(ctx context.Context, request customerweb.CustomerUpdatePhoneNumber) customerweb.CustomerResponse
-	UpdatePassword(ctx context.Context, request customerweb.CustomerUpdatePassword) customerweb.CustomerResponse
+	UpdateName(ctx context.Context, request customerweb.CustomerUpdateName) customerweb.CustomerResponseHandler
+	UpdateEmail(ctx context.Context, request customerweb.CustomerUpdateEmail) customerweb.CustomerResponseHandler
+	UpdatePhoneNumber(ctx context.Context, request customerweb.CustomerUpdatePhoneNumber) customerweb.CustomerResponseHandler
+	UpdatePassword(ctx context.Context, request customerweb.CustomerUpdatePassword) customerweb.CustomerResponseHandler
 }
