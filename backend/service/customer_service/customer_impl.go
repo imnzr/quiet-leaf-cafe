@@ -222,34 +222,24 @@ func (service *CustomerServiceImpl) UpdatePassword(ctx context.Context, request 
 		log.Printf("customer with id %d not found: %v", request.Customer_Id, err)
 		return customerweb.CustomerResponse{}
 	}
-	// 2. verifikasi password lama
-	err = bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(request.OldPassword))
+	// 2. hash password baru
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
-		log.Printf("old password does not match for customer with id %d: %v", request.Customer_Id, err)
+		log.Printf("error hashing password for customer with id %d: %v", request.Customer_Id, err)
 		return customerweb.CustomerResponse{}
 	}
-
-	// 3. hash password baru
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.NewPassword), bcrypt.DefaultCost)
-	if err != nil {
-		log.Printf("error hashing new password for customer with id %d: %v", request.Customer_Id, err)
-		return customerweb.CustomerResponse{}
-	}
-	hashedPasswordStr := string(hashedPassword)
-
-	customer.Password = request.NewPassword
-
-	// 4. update password customer
-	customer.Password = hashedPasswordStr
+	// 3. update password customer
+	customer.Password = string(hashedPassword)
 	_, err = service.CustomerRepository.UpdatePassword(ctx, tx, customer)
 	if err != nil {
 		log.Printf("error updating password for customer with id %d: %v", request.Customer_Id, err)
+		return customerweb.CustomerResponse{}
 	}
-
-	// 5. ambil ulang customer setelah update
+	// 4. ambil ulang customer setelah update
 	updatedCustomer, err := service.CustomerRepository.FindById(ctx, tx, request.Customer_Id)
 	if err != nil {
 		log.Printf("error fetching updated customer with id %d: %v", request.Customer_Id, err)
+		return customerweb.CustomerResponse{}
 	}
 	return customerweb.CustomerResponse{
 		Customer_id:  updatedCustomer.Customer_id,
