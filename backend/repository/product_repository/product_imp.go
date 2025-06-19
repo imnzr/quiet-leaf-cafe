@@ -106,7 +106,7 @@ func (p ProductRepositoryImpl) Search(ctx context.Context, tx *sql.Tx, keyword s
 
 // UpdateDescription implements ProductRepository.
 func (p ProductRepositoryImpl) UpdateDescription(ctx context.Context, tx *sql.Tx, product models.Product) (models.Product, error) {
-	query := "UPDATE FROM product SET description = ? WHERE product_id = ?"
+	query := "UPDATE product SET description = ? WHERE product_id = ?"
 	result, err := tx.ExecContext(ctx, query, product.Description, product.Product_id)
 	helper.HandleQueryError(err)
 
@@ -122,7 +122,7 @@ func (p ProductRepositoryImpl) UpdateDescription(ctx context.Context, tx *sql.Tx
 
 // UpdatePrice implements ProductRepository.
 func (p ProductRepositoryImpl) UpdatePrice(ctx context.Context, tx *sql.Tx, product models.Product) (models.Product, error) {
-	query := "UPDATE FROM product SET price = ? WHERE product_id = ?"
+	query := "UPDATE product SET price = ? WHERE product_id = ?"
 	result, err := tx.ExecContext(ctx, query, product.Price, product.Product_id)
 	helper.HandleQueryError(err)
 
@@ -138,7 +138,7 @@ func (p ProductRepositoryImpl) UpdatePrice(ctx context.Context, tx *sql.Tx, prod
 
 // UpdateTitle implements ProductRepository.
 func (p ProductRepositoryImpl) UpdateName(ctx context.Context, tx *sql.Tx, product models.Product) (models.Product, error) {
-	query := "UPDATE FROM product SET name = ? WHERE product_id = ?"
+	query := "UPDATE product SET name = ? WHERE product_id = ?"
 	result, err := tx.ExecContext(ctx, query, product.Name, product.Product_id)
 	helper.HandleQueryError(err)
 

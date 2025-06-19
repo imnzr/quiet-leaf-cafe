@@ -12,7 +12,8 @@ func ProductRouter(router *httprouter.Router, productController productcontrolle
 	router.GET("/api/product/:productId", productController.FindById)
 	router.DELETE("/product/delete/:productId", productController.Delete)
 
-	router.PUT("/product/update/description/:productId", productController.UpdateName)
+	router.PUT("/product/update-name/:productId", productController.UpdateName)
+	router.PUT("/product/update-description/:productId", productController.UpdateDescription)
 	router.PUT("/product/update/name/:productId", productController.UpdateDescription)
-	router.PUT("/product/update/price/:productId", productController.UpdatePrice)
+	router.PUT("/product/update-price/:productId", productController.UpdatePrice)
 }

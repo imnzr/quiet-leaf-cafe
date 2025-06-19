@@ -175,10 +175,11 @@ func (service *ProductServiceImpl) UpdateDescription(ctx context.Context, reques
 
 	_, err = service.ProductRepository.UpdateDescription(ctx, tx, product)
 	if err != nil {
-		log.Printf("error updateing description with id %d: %v", request.Product_id, err)
+		log.Printf("error updating description with id %d: %v", request.Product_id, err)
 		return productweb.ProductResponseHandler{
 			Success: false,
 			Message: "error updating product",
+			Data:    nil,
 		}
 	}
 	updatedProductDescription, err := service.ProductRepository.FindById(ctx, tx, request.Product_id)
@@ -187,13 +188,17 @@ func (service *ProductServiceImpl) UpdateDescription(ctx context.Context, reques
 		return productweb.ProductResponseHandler{
 			Success: false,
 			Message: "error fetching updated product",
+			Data:    nil,
 		}
 	}
 	return productweb.ProductResponseHandler{
 		Success: true,
 		Message: "Product description update successfully",
 		Data: productweb.ProductDataResponse{
+			Name:        updatedProductDescription.Name,
 			Description: updatedProductDescription.Description,
+			Price:       updatedProductDescription.Price,
+			Image:       updatedProductDescription.Image,
 		},
 	}
 }
@@ -210,15 +215,18 @@ func (service *ProductServiceImpl) UpdateName(ctx context.Context, request produ
 		return productweb.ProductResponseHandler{
 			Success: false,
 			Message: "Product not found",
+			Data:    nil,
 		}
 	}
 	product.Name = request.Name
 
 	_, err = service.ProductRepository.UpdateName(ctx, tx, product)
 	if err != nil {
+		log.Printf("error updating name with id %d: %v", request.Product_id, err)
 		return productweb.ProductResponseHandler{
 			Success: false,
 			Message: "Error updating product name",
+			Data:    nil,
 		}
 	}
 	updatedProductName, err := service.ProductRepository.FindById(ctx, tx, request.Product_id)
@@ -227,13 +235,17 @@ func (service *ProductServiceImpl) UpdateName(ctx context.Context, request produ
 		return productweb.ProductResponseHandler{
 			Success: false,
 			Message: "error fetching updated product",
+			Data:    nil,
 		}
 	}
 	return productweb.ProductResponseHandler{
 		Success: true,
 		Message: "Product updated name successfully",
 		Data: productweb.ProductDataResponse{
-			Name: updatedProductName.Name,
+			Name:        updatedProductName.Name,
+			Description: updatedProductName.Description,
+			Price:       updatedProductName.Price,
+			Image:       updatedProductName.Image,
 		},
 	}
 }
@@ -265,10 +277,26 @@ func (service *ProductServiceImpl) UpdatePrice(ctx context.Context, request prod
 			Data:    nil,
 		}
 	}
+
+	updatedProductPrice, err := service.ProductRepository.FindById(ctx, tx, request.Product_id)
+	if err != nil {
+		log.Printf("error fetching update product with id %d: %v", request.Product_id, err)
+		return productweb.ProductResponseHandler{
+			Success: false,
+			Message: "error fetching updated product",
+			Data:    nil,
+		}
+	}
+
 	return productweb.ProductResponseHandler{
 		Success: true,
 		Message: "Update price product successfully",
-		Data:    nil,
+		Data: productweb.ProductDataResponse{
+			Name:        updatedProductPrice.Name,
+			Description: updatedProductPrice.Description,
+			Price:       updatedProductPrice.Price,
+			Image:       updatedProductPrice.Image,
+		},
 	}
 }
 
