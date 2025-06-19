@@ -123,7 +123,7 @@ func (service *CustomerServiceImpl) FindById(ctx context.Context, customer_id in
 }
 
 // Login implements CustomerService.
-func (service *CustomerServiceImpl) Login(ctx context.Context, request customerweb.CustomerLoginRequest) customerweb.CustomerResponseHandler {
+func (service *CustomerServiceImpl) Login(ctx context.Context, request customerweb.CustomerLoginRequest) (customerweb.CustomerResponseHandler, error) {
 	tx, err := service.DB.Begin()
 	helper.HandleErrorTransaction(err)
 	defer helper.HandleTx(tx)
@@ -133,14 +133,14 @@ func (service *CustomerServiceImpl) Login(ctx context.Context, request customerw
 		return customerweb.CustomerResponseHandler{
 			Success: false,
 			Message: "Customer not found",
-		}
+		}, err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(request.Password))
 	if err != nil {
 		return customerweb.CustomerResponseHandler{
 			Success: false,
 			Message: "Invalid password",
-		}
+		}, err
 	}
 	return customerweb.CustomerResponseHandler{
 		Success: true,
@@ -151,7 +151,7 @@ func (service *CustomerServiceImpl) Login(ctx context.Context, request customerw
 			PhoneNumber: customer.Phone_number,
 			Email:       customer.Email,
 		},
-	}
+	}, nil
 
 }
 

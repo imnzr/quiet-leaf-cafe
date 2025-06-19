@@ -13,4 +13,6 @@ type ProductControllerInterface interface {
 	UpdateDescription(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
 	UpdateName(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
 	UpdatePrice(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
+	FindById(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
+	FindByAll(writter http.ResponseWriter, request *http.Request, params httprouter.Params)
 }

@@ -16,8 +16,32 @@ type ProductServiceImpl struct {
 	DB                *sql.DB
 }
 
-// Delete implements ProductService.
-func (service *ProductServiceImpl) Delete(ctx context.Context, product_id int) productweb.ProductResponseHandler {
+// FindByAll implements ProductService.
+func (service *ProductServiceImpl) FindByAll(ctx context.Context) []productweb.ProductDataResponse {
+	tx, err := service.DB.Begin()
+	helper.HandleErrorTransaction(err)
+	defer helper.HandleTx(tx)
+
+	products, err := service.ProductRepository.FindByAll(ctx, tx)
+	if err != nil {
+		log.Printf("error finding all products: %v", err)
+		return nil
+	}
+	var productResponse []productweb.ProductDataResponse
+	for _, product := range products {
+		productResponse = append(productResponse, productweb.ProductDataResponse{
+			Product_id:  product.Product_id,
+			Name:        product.Name,
+			Description: product.Description,
+			Price:       product.Price,
+			Image:       product.Image,
+		})
+	}
+	return productResponse
+}
+
+// FindById implements ProductService.
+func (service *ProductServiceImpl) FindById(ctx context.Context, product_id int) productweb.ProductResponseHandler {
 	tx, err := service.DB.Begin()
 	helper.HandleErrorTransaction(err)
 	defer helper.HandleTx(tx)
@@ -28,7 +52,6 @@ func (service *ProductServiceImpl) Delete(ctx context.Context, product_id int) p
 		return productweb.ProductResponseHandler{
 			Success: false,
 			Message: "Product not found",
-			Data:    nil,
 		}
 	}
 	return productweb.ProductResponseHandler{
@@ -41,6 +64,35 @@ func (service *ProductServiceImpl) Delete(ctx context.Context, product_id int) p
 			Price:       product.Price,
 			Image:       product.Image,
 		},
+	}
+}
+
+// Delete implements ProductService.
+func (service *ProductServiceImpl) Delete(ctx context.Context, product_id int) productweb.ProductResponseHandler {
+	tx, err := service.DB.Begin()
+	helper.HandleErrorTransaction(err)
+	defer helper.HandleTx(tx)
+
+	product, err := service.ProductRepository.FindById(ctx, tx, product_id)
+	if err != nil {
+		return productweb.ProductResponseHandler{
+			Success: false,
+			Message: "Product not found",
+		}
+	}
+
+	err = service.ProductRepository.Delete(ctx, tx, product)
+	if err != nil {
+		return productweb.ProductResponseHandler{
+			Success: false,
+			Message: "failed to delete product",
+		}
+	}
+
+	return productweb.ProductResponseHandler{
+		Success: true,
+		Message: "Product deleted successfully",
+		Data:    nil,
 	}
 }
 

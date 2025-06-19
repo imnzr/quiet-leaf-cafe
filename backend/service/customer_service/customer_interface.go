@@ -12,7 +12,7 @@ type CustomerService interface {
 	FindById(ctx context.Context, customer_id int) customerweb.CustomerResponseHandler
 	FindByAll(ctx context.Context) []customerweb.CustomerDataResponse
 	FindByEmail(ctx context.Context, email string) customerweb.CustomerResponseHandler
-	Login(ctx context.Context, request customerweb.CustomerLoginRequest) customerweb.CustomerResponseHandler
+	Login(ctx context.Context, request customerweb.CustomerLoginRequest) (customerweb.CustomerResponseHandler, error)
 
 	UpdateName(ctx context.Context, request customerweb.CustomerUpdateName) customerweb.CustomerResponseHandler
 	UpdateEmail(ctx context.Context, request customerweb.CustomerUpdateEmail) customerweb.CustomerResponseHandler

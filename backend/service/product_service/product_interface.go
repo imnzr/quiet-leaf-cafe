@@ -13,4 +13,6 @@ type ProductService interface {
 	UpdateDescription(ctx context.Context, request productweb.ProductUpdateDescription) productweb.ProductResponseHandler
 	UpdateName(ctx context.Context, request productweb.ProductUpdateName) productweb.ProductResponseHandler
 	UpdatePrice(ctx context.Context, request productweb.ProductUpdatePrice) productweb.ProductResponseHandler
+	FindById(ctx context.Context, product_id int) productweb.ProductResponseHandler
+	FindByAll(ctx context.Context) []productweb.ProductDataResponse
 }
