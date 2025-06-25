@@ -24,7 +24,7 @@ func (controller *OrderItemController) CreateOrder(writter http.ResponseWriter, 
 		http.Error(writter, "invalid request body", http.StatusBadRequest)
 	}
 
-	orderResponse, err := controller.OrderService.CreateOrder(request.Context(), orderItemRequest)
+	paymentUrl, err := controller.OrderService.CreateOrder(request.Context(), orderItemRequest)
 	if err != nil {
 		http.Error(writter, "invalid to create order", http.StatusBadRequest)
 		return
@@ -33,7 +33,7 @@ func (controller *OrderItemController) CreateOrder(writter http.ResponseWriter, 
 	webResponse := web.WebResponse{
 		Code:   http.StatusCreated,
 		Status: "Created",
-		Data:   orderResponse,
+		Data:   paymentUrl,
 	}
 	utils.WriteJsonSuccess(writter, http.StatusOK, webResponse)
 }

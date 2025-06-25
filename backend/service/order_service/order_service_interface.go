@@ -7,5 +7,5 @@ import (
 )
 
 type OrderService interface {
-	CreateOrder(ctx context.Context, request models.OrderRequest) (int64, error)
+	CreateOrder(ctx context.Context, request models.OrderRequest) (string, error)
 }

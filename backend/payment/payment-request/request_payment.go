@@ -1,5 +1,0 @@
-package paymentrequest
-
-func PaymentRequest() {
-
-}
