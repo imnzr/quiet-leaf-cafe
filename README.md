@@ -11,7 +11,7 @@ Welcome to the Coffe Shop Backend API documentation. This project is a RESTful A
 1. 👤 User Management
 2. ☕ Menu Management
 3. 🧾 Order Management
-4. 💳 Payments  (Coming soon)
+4. 💳 Payments
 5. 📈 Dashboard Ready (Coming soon)
 ## 📁 Project Structure
   ```
