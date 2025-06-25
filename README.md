@@ -21,6 +21,7 @@ Welcome to the Coffe Shop Backend API documentation. This project is a RESTful A
   ├── main.go                # Entry point
   ├── models                 # Struct definitions for DB & request
   ├── repository             # Database access layer
+  ├── payments               # Payment Gateway
   ├── routes                 # Endpoint layer
   ├── service                # Business logic
   ├── utils                  # Response HTTP request/response
