@@ -4,15 +4,14 @@ Welcome to the Coffe Shop Backend API documentation. This project is a RESTful A
 ## 🛠️ Technologies Used
 1. Go (Golang) - Main programming language for backend logic
 2. Mysql - Relational Database
-3. JWT - Json Web Token for user authentication
+3. JWT - Json Web Token for user authentication (Coming Soon)
 4. Net/Http Native
-5. Xendit - Payment Gateway (Coming soon)
+5. Xendit - Payment Gateway
 ## 📦 Main Features
 1. 👤 User Management
 2. ☕ Menu Management
 3. 🧾 Order Management
 4. 💳 Payments
-5. 📈 Dashboard Ready (Coming soon)
 ## Quiet Leaf Cafe Database
 ![Quite-Leaf-Coffe-Page-1](https://github.com/user-attachments/assets/c70db363-0df5-4e67-bcbf-7c0b126e1774)
 ## 📁 Project Structure
@@ -29,3 +28,4 @@ Welcome to the Coffe Shop Backend API documentation. This project is a RESTful A
   ├── utils                  # Response HTTP request/response
   └── web                    # Response data
 ```
+## 👉 [View Full API Documentation on Postman](https://documenter.getpostman.com/view/30178328/2sB2xEBUG7)
