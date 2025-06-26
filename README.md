@@ -13,6 +13,8 @@ Welcome to the Coffe Shop Backend API documentation. This project is a RESTful A
 3. 🧾 Order Management
 4. 💳 Payments
 5. 📈 Dashboard Ready (Coming soon)
+## Quiet Leaf Cafe Database
+![Quite-Leaf-Coffe-Page-1](https://github.com/user-attachments/assets/c70db363-0df5-4e67-bcbf-7c0b126e1774)
 ## 📁 Project Structure
   ```
   ├── controller             # Handles HTTP request/response
